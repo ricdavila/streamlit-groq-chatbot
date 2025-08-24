@@ -14,7 +14,7 @@ def gerar_resposta(mensagens):
         model="llama-3.3-70b-versatile"
     )
 
-    resposta = stream.choices[0].message.content
-    mensagens.append({'role': 'assistant', 'content': resposta})
+    #resposta = stream.choices[0].message.content
+    #mensagens.append({'role': 'assistant', 'content': resposta})
 
     return stream.choices[0].message.content
