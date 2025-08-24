@@ -17,15 +17,22 @@ if not 'mensagens' in st.session_state:
         {'role': 'system', 'content': 'You are a helpful assistant that speaks portuguese with your users, unless they speak another language.'}
     ]
 
-# gera o layout da página
+# configurações iniciais
 st.set_page_config(page_title='GroqTalk', 
                    page_icon='💻', 
                    layout='centered'
                    )
 
-st.title('💻GroqTalk')
-st.divider()
-chat_input = st.chat_input()
+# muda o layout da página a depender de existir chat ou não
+placeholder = st.container()
+if len(st.session_state.mensagens) <= 1:
+    placeholder.container(height=100, border=False)
+    placeholder.markdown('<h2><center>Olá, posso ajudar?</center>', unsafe_allow_html=True)
+else:
+    st.markdown('<h3><center>💻GroqTalk', unsafe_allow_html=True)
+    st.divider()
+chat_input = st.chat_input(placeholder='Peça ao Groq', width='stretch')
+
 
 # carrega o histórico de mensagens no chat
 for mensagem in st.session_state.mensagens:
@@ -35,7 +42,10 @@ for mensagem in st.session_state.mensagens:
 
 # escreve o input do usuário e a resposta do chatbot
 if chat_input:
-    st.session_state.mensagens.append({'role': 'user', 'content': chat_input})
+    st.session_state.mensagens.append({
+        'role': 'user',
+        'content': chat_input,
+        })
     # carrega o último input e a resposta do chatbot
     with st.chat_message('user'):
         st.markdown(chat_input)
