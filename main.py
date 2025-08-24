@@ -20,7 +20,12 @@ def gerar_layout_pagina() -> None:
 
 
 def escrever_resposta_groq(mensagem: str) -> None:
-    '''Escreve a resposta do Groq com efeito de digitação'''
+    '''
+    Escreve a resposta do Groq com efeito de digitação
+
+    Args:
+        mensagem(str): resposta do modelo
+    '''
     placeholder = st.empty()
     texto = ''
     for char in mensagem:
@@ -30,7 +35,13 @@ def escrever_resposta_groq(mensagem: str) -> None:
 
 
 def adicionar_mensagem(role: str, mensagem: str) -> None:
-    '''Adiciona mensagens ao histórico do chat'''
+    '''
+    Adiciona mensagens ao histórico do chat
+    
+    Args:
+        role(str): 'assistant' ou 'user'
+        mensagem(str): o conteúdo da mensagem
+    '''
     st.session_state.mensagens.append({'role': role, 'content': mensagem})
 
 
@@ -59,9 +70,15 @@ def main() -> None:
         # Groq
         with st.chat_message('assistant'):
             with st.spinner('Só um segundo...'):
-                resposta_ia = groq_ia.gerar_resposta(st.session_state.mensagens)
-                adicionar_mensagem('assistant', resposta_ia)
-                escrever_resposta_groq(resposta_ia)
+                try:
+                    resposta_ia = groq_ia.gerar_resposta(st.session_state.mensagens)
+                except Exception as e:
+                    st.error(e)
+                else:
+                    adicionar_mensagem('assistant', resposta_ia)
+                    escrever_resposta_groq(resposta_ia)
+                
+                
     
 
 if __name__ == '__main__':
