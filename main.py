@@ -51,7 +51,6 @@ def main() -> None:
     # input do usuário
     entrada_usuario = st.chat_input(placeholder='Peça ao Groq', width='stretch')
 
-    # atualiza o histórico, exibe o input do usuário e escreve a resposta do groq
     if entrada_usuario:
         # usuário
         adicionar_mensagem('user', entrada_usuario)
