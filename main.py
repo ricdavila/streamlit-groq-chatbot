@@ -6,9 +6,6 @@ APP_TITLE = 'GroqTalk'
 APP_ICON = '💻'
 SLEEP_TIME = 0.005
 
-
-
-
 def gerar_layout_pagina() -> None:
     '''Carrega os principais widgets e configurações do layout da página'''
     st.set_page_config(
@@ -16,7 +13,7 @@ def gerar_layout_pagina() -> None:
         page_icon='💻', 
         layout='centered',
     )    
-    #st.markdown(f'<h3><center>{APP_ICON}{APP_TITLE}', unsafe_allow_html=True)
+    #st.markdown(f'<h3><center>{APP_ICON}{APP_TITLE}', unsafe_allow_html=True)  
     if len(st.session_state.mensagens) <= 1:
         st.container(height=150, border=False)
         st.markdown('<h2><center>Olá, posso ajudar?</center>', unsafe_allow_html=True)
@@ -25,18 +22,50 @@ def gerar_layout_pagina() -> None:
     with st.sidebar:
         st.markdown(f'<center><h1>{APP_ICON}{APP_TITLE}', unsafe_allow_html=True)
         st.divider()
-        st.button('Salvar', icon=':material/download:', width='stretch', on_click=salvar_conversa)
-        st.button('**Apagar**', icon=':material/delete:', width='stretch', type='primary', on_click=apagar_conversa)
+        if len(st.session_state.mensagens) > 1:
+            st.button(
+                'Salvar', 
+                icon=':material/download:', 
+                width='stretch', 
+                on_click=salvar_conversa)
+        st.button(
+            '**Apagar**',
+            icon=':material/delete:',
+            width='stretch',
+            type='primary',
+            on_click=apagar_conversa)
+
+
+def converter_para_download(historico: str):
+    role = ''
+    file = ''
+    for mensagem in historico[1:]:
+        if mensagem['role'] == 'assistant':
+            role = 'Groq'
+        else:
+            role = 'User'
+        file += f'**{role}:** {mensagem['content']}\n'
+    return file
+    
 
 
 @st.dialog(':material/download: Salvar Conversa')
 def salvar_conversa():
-    #'''Salva o arquivo'''
+    conversa = converter_para_download(st.session_state.mensagens)
     st.markdown('Você deseja salvar o **histórico completo** dessa conversa ou somente a **última mensagem** enviada pelo Groq?', unsafe_allow_html=True)
     st.container(height=25, border=False)
-    # trocar por botões de download?
-    st.button('Todas as mensagens', icon=':material/history:', width='stretch')
-    st.button('Apenas a última', icon=':material/chat:', width='stretch')
+    st.download_button(
+        'Todas as mensagens',
+        data=conversa,
+        file_name='full_chat.txt',
+        icon=':material/history:',
+        width='stretch')
+    st.download_button(
+        'Apenas a última',
+        data=st.session_state.mensagens[len(st.session_state.mensagens)-1]['content'],
+        file_name='last_message.txt',
+        icon=':material/chat:',
+        width='stretch')
 
 
 
@@ -106,8 +135,6 @@ def main() -> None:
                     adicionar_mensagem('assistant', resposta_ia)
                     escrever_resposta_groq(resposta_ia)
                 
-                
-    
 
 if __name__ == '__main__':
     main()
