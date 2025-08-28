@@ -76,15 +76,15 @@ O projeto está organizado da seguinte forma para manter a clareza e a separaç�
 
 `streamlit-groq-chatbot/`
 
-├── `.env` # Arquivo para armazenar as chaves da API (não versionado)
+├── `.env` — Arquivo para armazenar as chaves da API (não versionado)
 
-├── `main.py` # Lógica principal da aplicação Streamlit (frontend e fluxo)
+├── `main.py` — Lógica principal da aplicação Streamlit (frontend e fluxo)
 
-├── `groq_ia.py` # Módulo para interagir com a API da Groq (backend)
+├── `groq_ia.py` — Módulo para interagir com a API da Groq (backend)
 
-├── `requirements.txt` # Dependências do projeto
+├── `requirements.txt` — Dependências do projeto
 
-└── `README.md` # Esta documentação
+└── `README.md` — Esta documentação
 
 * `main.py`: Responsável por toda a interface do usuário, gerenciamento de estado da sessão (`st.session_state`) e pela orquestração das chamadas ao backend.
 * `groq_ia.py`: Gerencia a comunicação com a API da Groq, mantendo a lógica de IA separada da lógica de apresentação.
