@@ -6,7 +6,7 @@ O objetivo deste projeto é oferecer uma experiência de conversação fluida, c
 
 
 
-## ✨ Funcionalidades
+## ✨ Features
 
 * **Interface Direta:** Um layout limpo e simples construído com Streamlit.
 * **Respostas Rápidas:** Integração com a API da Groq para uma geração de texto.
@@ -16,7 +16,7 @@ O objetivo deste projeto é oferecer uma experiência de conversação fluida, c
 
 
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias
 
 * **Frontend:** Streamlit
 * **Backend (LLM):** Groq API
@@ -25,7 +25,7 @@ O objetivo deste projeto é oferecer uma experiência de conversação fluida, c
 
 
 
-## 🚀 Como Executar o Projeto
+## 🚀 Como Executar
 
 Siga os passos abaixo para executar o GroqTalk localmente.
 
@@ -38,31 +38,31 @@ Siga os passos abaixo para executar o GroqTalk localmente.
 
 1.  **Clone o repositório:**
 
-```bash
-git clone https://github.com/ricdavila/streamlit-groq-chatbot.git
-cd streamlit-groq-chatbot
-```
+      ```bash
+      git clone https://github.com/ricdavila/streamlit-groq-chatbot.git
+      cd streamlit-groq-chatbot
+      ```
 
 2.  **Instale as dependências:**
 
-```bash
-pip install -r requirements.txt
-```
+      ```bash
+      pip install -r requirements.txt
+      ```
 
 3.  **Configure sua chave de API:**
-- Crie um arquivo chamado `.env` na raiz do projeto.
-- Adicione sua chave da API da Groq da seguinte forma:
+      - Crie um arquivo chamado `.env` na raiz do projeto.
+      - Adicione sua chave da API da Groq da seguinte forma:
 
-```bash
-GROQ_API_KEY=<SUA_CHAVE_API_AQUI>
-```
+      ```bash
+      GROQ_API_KEY=<SUA_CHAVE_API_AQUI>
+      ```
 
 ### Execução
 
 1.  **Inicie a aplicação Streamlit:** 
-```bash
-streamlit run main.py
-```
+      ```bash
+      streamlit run main.py
+      ```
 
 *Execute o comando do `streamlit`dentro do diretório do projeto.*
 
