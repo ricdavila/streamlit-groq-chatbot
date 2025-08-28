@@ -4,7 +4,7 @@
 
 O objetivo deste projeto é oferecer uma experiência de conversação fluida, com respostas geradas quase em tempo real, aproveitando a performance única dos LPUs (Language Processing Units) da Groq.
 
----
+
 
 ## ✨ Funcionalidades
 
@@ -14,7 +14,7 @@ O objetivo deste projeto é oferecer uma experiência de conversação fluida, c
     * 📥 **Salvar Histórico:** Opção para baixar a conversa completa ou apenas a última resposta do modelo.
     * 🗑️ **Apagar Conversa:** Limpe o histórico para iniciar um novo diálogo.
 
----
+
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -23,7 +23,7 @@ O objetivo deste projeto é oferecer uma experiência de conversação fluida, c
 * **Linguagem:** Python
 * **Gerenciamento de Chaves:** python-dotenv
 
----
+
 
 ## 🚀 Como Executar o Projeto
 
@@ -68,7 +68,7 @@ streamlit run main.py
 
 2. **O aplicativo será aberto automaticamente no seu browser.**
 
----
+
 
 ## 🏗️ Estrutura do Projeto
 
