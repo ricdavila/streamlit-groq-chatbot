@@ -8,26 +8,28 @@ SLEEP_TIME = 0.005
 
 def gerar_layout_pagina() -> None:
     '''Carrega os principais widgets e configurações do layout da página'''
+
     st.set_page_config(
         page_title=APP_TITLE, 
         page_icon='💻', 
         layout='centered',
-    )    
-    #st.markdown(f'<h3><center>{APP_ICON}{APP_TITLE}', unsafe_allow_html=True)  
+    )
+    # mensagem inicial
     if len(st.session_state.mensagens) <= 1:
         st.container(height=150, border=False)
         st.markdown('<h2><center>Olá, posso ajudar?</center>', unsafe_allow_html=True)
-    
     # sidebar
     with st.sidebar:
         st.markdown(f'<center><h1>{APP_ICON}{APP_TITLE}', unsafe_allow_html=True)
         st.divider()
+        # salvar
         if len(st.session_state.mensagens) > 1:
             st.button(
                 'Salvar', 
                 icon=':material/download:', 
                 width='stretch', 
                 on_click=salvar_conversa)
+        # apagar
         st.button(
             '**Apagar**',
             icon=':material/delete:',
@@ -36,59 +38,19 @@ def gerar_layout_pagina() -> None:
             on_click=apagar_conversa)
 
 
-def converter_para_download(historico: str):
-    role = ''
-    file = ''
-    for mensagem in historico[1:]:
-        if mensagem['role'] == 'assistant':
-            role = 'Groq'
-        else:
-            role = 'User'
-        file += f'**{role}:** {mensagem['content']}\n'
-    return file
-    
+def carregar_historico() -> None:
+    '''Carrega e exibe cada mensagem presente no histórico'''
+    for mensagem in st.session_state.mensagens:
+        if not mensagem['role'] == 'system':
+            with st.chat_message(mensagem['role']):
+                st.markdown(mensagem['content'])
 
 
-@st.dialog(':material/download: Salvar Conversa')
-def salvar_conversa():
-    conversa = converter_para_download(st.session_state.mensagens)
-    st.markdown('Você deseja salvar o **histórico completo** dessa conversa ou somente a **última mensagem** enviada pelo Groq?', unsafe_allow_html=True)
-    st.container(height=25, border=False)
-    st.download_button(
-        'Todas as mensagens',
-        data=conversa,
-        file_name='full_chat.txt',
-        icon=':material/history:',
-        width='stretch')
-    st.download_button(
-        'Apenas a última',
-        data=st.session_state.mensagens[len(st.session_state.mensagens)-1]['content'],
-        file_name='last_message.txt',
-        icon=':material/chat:',
-        width='stretch')
-
-
-
-def apagar_conversa():
+def apagar_conversa() -> None:
     '''Apaga o histórico de mensagens'''
     st.session_state.mensagens = [
         {'role': 'system', 'content': 'You are a helpful assistant that speaks portuguese with your users, unless they speak another language.'}
     ]
-
-   
-def escrever_resposta_groq(mensagem: str) -> None:
-    '''
-    Escreve a resposta do Groq com efeito de digitação
-
-    Args:
-        mensagem(str): resposta do modelo
-    '''
-    placeholder = st.empty()
-    texto = ''
-    for char in mensagem:
-        texto += char
-        placeholder.markdown(texto)
-        time.sleep(SLEEP_TIME)
 
 
 def adicionar_mensagem(role: str, mensagem: str) -> None:
@@ -102,17 +64,69 @@ def adicionar_mensagem(role: str, mensagem: str) -> None:
     st.session_state.mensagens.append({'role': role, 'content': mensagem})
 
 
-def carregar_historico() -> None:
-    '''Carrega e exibe cada mensagem presente no histórico'''
-    for mensagem in st.session_state.mensagens:
-        if not mensagem['role'] == 'system':
-            with st.chat_message(mensagem['role']):
-                st.markdown(mensagem['content'])
+def escrever_resposta_groq(mensagem: str) -> None:
+    '''
+    Escreve a resposta do Groq com efeito de digitação
+
+    Args:
+        mensagem(str): resposta do modelo
+    '''
+
+    placeholder = st.empty()
+    texto = ''
+    for char in mensagem:
+        texto += char
+        placeholder.markdown(texto)
+        time.sleep(SLEEP_TIME)
+
+
+def converter_para_download(historico: list) -> str:
+    '''
+    Converte o histórico de mensagens em formato passível de download
     
+    Args:
+        historico(list): lista contendo o histórico de mensagens
+    '''
+    role = ''
+    mensagens = ''
+    for mensagem in historico[1:]:
+        if mensagem['role'] == 'assistant':
+            role = 'Groq'
+        else:
+            role = 'User'
+        mensagens += f'**{role}:** {mensagem['content']}\n'
+    return mensagens
+
+
+@st.dialog(':material/download: Salvar Conversa')
+def salvar_conversa() -> None:
+    '''Popup para salvamento da conversa'''
+
+    conversa = converter_para_download(st.session_state.mensagens)
+    st.markdown('Você deseja salvar o **histórico completo** dessa conversa ou somente a **última mensagem** enviada pelo Groq?', unsafe_allow_html=True)
+    st.container(height=25, border=False)
+    # todas as mensagens
+    st.download_button(
+        'Todas as mensagens',
+        data=conversa,
+        file_name='full_chat.txt',
+        icon=':material/history:',
+        width='stretch')
+    # apenas a última mensagem
+    st.download_button(
+        'Apenas a última',
+        data=st.session_state.mensagens[len(st.session_state.mensagens)-1]['content'],
+        file_name='last_message.txt',
+        icon=':material/chat:',
+        width='stretch')
+
+
 def main() -> None:
+
     st.session_state.setdefault('mensagens', [
         {'role': 'system', 'content': 'You are a helpful assistant that speaks portuguese with your users, unless they speak another language.'}
     ])
+
     gerar_layout_pagina()
     carregar_historico()
 
